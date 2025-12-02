@@ -30,6 +30,16 @@ body {
     gap: 24px;
 }
 
+.topbar__nav a {
+    text-decoration: none;
+    font-size: 15px;
+    color: #444;
+}
+
+.topbar__nav a:hover {
+    color: #009688;
+}
+
 .topbar__link {
     text-decoration: none;
     font-size: 14px;
@@ -43,7 +53,7 @@ body {
 .topbar__right {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 28px;
 }
 
 .topbar__button {
@@ -72,19 +82,11 @@ body {
 .sidebar {
     width: 200px;
     background: #dde5ea;
-    padding: 20px 12px;
+    padding: 20px 12;
 }
 
 .sidebar-section {
     margin-bottom: 26px;
-}
-
-.sidebar-section__title {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 8px;
-    color: #555555;
 }
 
 .nav-btn,

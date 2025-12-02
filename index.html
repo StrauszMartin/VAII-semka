@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>TOPDANCE – Hlavné oznamy</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header class="topbar">
@@ -13,12 +13,19 @@
             <img src="img/logo-topdance.svg" alt="TOPDANCE logo">
         </a>
     </div>
-    <nav class="topbar__nav">
-        <a href="#" class="topbar__link">Domov</a>
-        <a href="#" class="topbar__link">Súťaže</a>
-        <a href="#" class="topbar__link">Kontakt</a>
-    </nav>
+    
     <div class="topbar__right">
+        <nav class="topbar__nav">
+            <a href="#" class="topbar__link">Domov</a>
+            <a href="https://szts.ksis.eu/menu.php?akcia=KS"
+            class="topbar__link"
+            target="_blank"
+            rel="noopener noreferrer">
+            Súťaže
+            </a>
+            <a href="#" class="topbar__link">Kontakt</a>
+        </nav>
+
         <!-- pre neprihlásených -->
         <a href="#" class="topbar__button">Prihlásenie</a>
 
@@ -32,12 +39,10 @@
     <!-- SIDEBAR -->
     <aside class="sidebar">
         <section class="sidebar-section">
-            <div class="sidebar-section__title">Oznamy</div>
             <button class="nav-btn" data-view="main">Hlavné oznamy</button>
         </section>
 
         <section class="sidebar-section">
-            <div class="sidebar-section__title">Individuálne lekcie</div>
             <button class="accordion-toggle">Individuálne lekcie</button>
             <div class="accordion-content">
                 <button class="accordion-link" data-view="ind-stt">ŠTT</button>
@@ -46,7 +51,6 @@
         </section>
 
         <section class="sidebar-section">
-            <div class="sidebar-section__title">Skupiny</div>
             <button class="accordion-toggle">Skupiny</button>
             <div class="accordion-content">
                 <button class="accordion-link" data-view="grp-tm1">TM1</button>
@@ -175,6 +179,6 @@
     </main>
 </div>
 
-<script src="js/main.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
