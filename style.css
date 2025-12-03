@@ -20,7 +20,7 @@ body {
     background: #ffffff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.06);
 }
-/*
+
 .menu-toggle {
     display: none;
     width: 36px;
@@ -42,7 +42,6 @@ body {
     background: #333;
     border-radius: 2px;
 }
-*/
 .topbar__logo img {
     height: 42px;
 }
@@ -177,7 +176,7 @@ body {
     background: rgba(255,255,255,0.7);
     border-radius: 999px;
 }
-/*
+
 .sidebar-overlay {
     position: fixed;
     inset: 0;
@@ -191,7 +190,6 @@ body {
 body.sidebar-open {
     overflow: hidden;
 }
-*/
 /* MAIN */
 
 .main {
@@ -333,7 +331,7 @@ body.sidebar-open {
 }
 
 /* RESPONSIVE */
-/*
+
 @media (max-width: 900px) {
     .topbar {
         padding: 10px 16px;
@@ -390,4 +388,38 @@ body.sidebar-open {
         margin-top: 6px;
     }
 }
-*/
+
+
+
+header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+/* Logo */
+.logo-img {
+    height: 55px;
+}
+
+/* Menu hyperlinks */
+.custom-link {
+    color: #000 !important;
+    font-weight: 500;
+    margin-right: 18px;
+}
+.custom-link:hover {
+    color: #1c6b3b !important;
+}
+
+/* Login button */
+.login-btn {
+    background-color: #1c6b3b;
+    color: white !important;
+    padding: 6px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+.login-btn:hover {
+    background-color: #15562f;
+}
+

@@ -1,4 +1,4 @@
-/*// mobilnƒý sidebar: hamburger prepƒðnaƒõ a overlay
+// mobilnƒý sidebar: hamburger prepƒðnaƒõ a overlay
 const bodyEl = document.body;
 const menuToggleBtn = document.querySelector('.menu-toggle');
 const sidebarEl = document.querySelector('.sidebar');
@@ -22,7 +22,7 @@ document.querySelectorAll('.sidebar button').forEach((btn) => {
         }
     });
 });
-*/
+
 // jednoduchý accordion pre Individuálne lekcie a Skupiny
 document.querySelectorAll('.accordion-toggle').forEach((btn) => {
     btn.addEventListener('click', () => {
