@@ -3,7 +3,10 @@ html, body { height: 100%; }
 .left-col {
   background: linear-gradient(180deg, #f0fbff 0%, #e9f6f9 100%);
 }
+
 .logo-wrap svg { border-radius: 12px; }
 @media (max-width: 991.98px) {
   .left-col { display: none !important; }
 }
+
+

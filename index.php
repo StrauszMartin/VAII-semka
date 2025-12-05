@@ -1,6 +1,9 @@
 ﻿<?php
-require "db.php";
-$user_role = "trener";
+session_start();
+require 'db.php';
+
+$sql = "SELECT * FROM oznamy ORDER BY datum DESC";
+$result = $conn->query($sql);
 ?>
 
 <!DOCTYPE html>
@@ -67,11 +70,11 @@ $user_role = "trener";
                 <div class="sidebar-group">
                     <button class="sidebar-group-toggle" aria-expanded="true">Hlavné oznamy</button>
 
-                    <?php if ($user_role === "admin" || $user_role === "trener"): ?>
-                    <ul class="sidebar-sublist">
-                        <li class="sidebar-subitem">➕ Pridať oznam</li>
-                        <li class="sidebar-subitem">🛠 Správa oznamov</li>
-                    </ul>
+                    <?php if (isset($_SESSION["user_role"]) && ($_SESSION["user_role"] === "admin" || $_SESSION["user_role"] === "trener")): ?>
+                        <ul class="sidebar-sublist">
+                            <li class="sidebar-subitem">➕ Pridať oznam</li>
+                            <li class="sidebar-subitem">🛠 Správa oznamov</li>
+                        </ul>
                     <?php endif; ?>
                 </div>
 
@@ -94,6 +97,14 @@ $user_role = "trener";
                     </ul>
                 </div>
             </nav>
+
+            <?php if (isset($_SESSION['user_role'])): ?>
+    <div class="sidebar-footer">
+        <form action="Prihlasovanie/logout.php" method="post">
+            <button type="submit" class="sidebar-logout-btn">Odhlásiť</button>
+        </form>
+    </div>
+<?php endif; ?>
         </aside>
 
         <!-- MAIN CONTENT -->
@@ -107,58 +118,73 @@ $user_role = "trener";
         </div>
 
         <!-- KARTA OZNAMU -->
-        <article class="announcement-card">
-            <!-- horný riadok: názov + dátum -->
-            <div class="announcement-card-header d-flex justify-content-between align-items-start mb-3">
-                <div>
-                    <h3 class="announcement-title mb-0">
-                        Elite Dance Camp<br>Bratislava
-                    </h3>
-                </div>
-                <span class="announcement-date">15. 9. 2025</span>
-            </div>
+        <?php while ($row = $result->fetch_assoc()): ?>
+<article class="announcement-card | mt-1rem mb-3rem">
 
-            <!-- telo karty -->
-            <div class="announcement-body row g-4">
-                <!-- obrázok -->
-                <div class="col-md-4">
-                    <img src="camp.jpg" alt="Elite Dance Camp Bratislava"
-                         class="announcement-image img-fluid">
-                </div>
+    <!-- horný riadok: názov + dátum -->
+    <div class="announcement-card-header d-flex justify-content-between align-items-start mb-3">
+        <div>
+            <h3 class="announcement-title mb-0">
+                <?php 
+                // automatické zalomenie, ak je názov dlhý
+                echo nl2br(htmlspecialchars($row["nadpis"])); 
+                ?>
+            </h3>
+        </div>
 
-                <!-- textová časť -->
-                <div class="col-md-8">
-                    <!-- meta info v dvoch stĺpcoch -->
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="announcement-meta">
-                                <div><span class="meta-label">Čas:</span></div>
-                                <div><span class="meta-label">Kde:</span></div>
-                                <div><span class="meta-label">Koľko:</span></div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="announcement-meta">
-                                <div><span class="meta-label">S kým:</span></div>
-                                <div><span class="meta-label">Ako:</span></div>
-                            </div>
-                        </div>
+        <span class="announcement-date">
+            <?php echo date("j. n. Y", strtotime($row["datum"])); ?>
+        </span>
+    </div>
+
+    <!-- telo karty -->
+    <div class="announcement-body row g-4">
+        
+        <!-- obrázok (nemáš v DB – použijeme default alebo nič) -->
+        <div class="col-md-4">
+            <img src="<?php echo $row['obrazok'] ?? 'default.jpg'; ?>" 
+                 alt="<?php echo htmlspecialchars($row["nadpis"]); ?>"
+                 class="announcement-image img-fluid">
+        </div>
+
+        <!-- textová časť -->
+        <div class="col-md-8">
+
+            <!-- meta info v dvoch stĺpcoch -->
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="announcement-meta">
+                        <div><span class="meta-label">Čas:</span> <?php echo $row["cas"] ?: "-"; ?></div>
+                        <div><span class="meta-label">Kde:</span> <?php echo $row["kde"] ?: "-"; ?></div>
+                        <div><span class="meta-label">Koľko:</span> <?php echo $row["kolko"] ?: "-"; ?></div>
                     </div>
+                </div>
 
-                    <!-- popis -->
-                    <p class="announcement-text mt-3">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In accumsan eleifend tellus
-                        condimentum elementum. Mauris vestibulum rutrum neque sit amet congue. Morbi tincidunt
-                        eros quis tellus varius scelerisque.
-                    </p>
-
-                    <!-- autor -->
-                    <div class="text-end mt-3">
-                        <span class="announcement-author">Tomáš Blažek</span>
+                <div class="col-sm-6">
+                    <div class="announcement-meta">
+                        <div><span class="meta-label">S kým:</span> -</div>
+                        <div><span class="meta-label">Ako:</span> -</div>
                     </div>
                 </div>
             </div>
-        </article>
+
+            <!-- popis -->
+            <p class="announcement-text mt-3">
+                <?php echo nl2br(htmlspecialchars($row["popis"])); ?>
+            </p>
+
+            <!-- autor -->
+            <div class="text-end mt-3">
+                <span class="announcement-author">
+                    <?php echo htmlspecialchars($row["autor"]); ?>
+                </span>
+            </div>
+
+        </div>
+    </div>
+
+</article>
+<?php endwhile; ?>
 
     </div>
 </main>

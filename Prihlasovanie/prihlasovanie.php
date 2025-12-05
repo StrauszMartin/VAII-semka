@@ -45,7 +45,7 @@ require "../db.php";
             </div>
 
             <!-- Login form -->
-            <form action="" method="post" class="needs-validation" novalidate>
+            <form action="login.php" method="post" class="needs-validation" novalidate>
                 
                 <?php if (!empty($chyba)): ?>
                 <div class="alert alert-danger"><?php echo $chyba; ?></div>
