@@ -1,6 +1,9 @@
 ﻿<?php
 require "db.php";
+$test = "PHP funguje";
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="sk">
@@ -19,6 +22,7 @@ require "db.php";
 
 <div class="page-wrapper">
 
+<h1><?php echo $test; ?></h1>
     <!-- HEADER -->
     <header class="py-2">
         <div class="container d-flex align-items-center justify-content-between">
