@@ -1,5 +1,6 @@
 ﻿<?php
 require "db.php";
+$user_role = "trener";
 ?>
 
 <!DOCTYPE html>
@@ -65,7 +66,15 @@ require "db.php";
             <nav class="sidebar-nav">
                 <div class="sidebar-group">
                     <button class="sidebar-group-toggle" aria-expanded="true">Hlavné oznamy</button>
+
+                    <?php if ($user_role === "admin" || $user_role === "trener"): ?>
+                    <ul class="sidebar-sublist">
+                        <li class="sidebar-subitem">➕ Pridať oznam</li>
+                        <li class="sidebar-subitem">🛠 Správa oznamov</li>
+                    </ul>
+                    <?php endif; ?>
                 </div>
+
 
                 <div class="sidebar-group">
                     <button class="sidebar-group-toggle" aria-expanded="true">Individuálne lekcie <span class="chev">↓</span></button>
@@ -80,7 +89,7 @@ require "db.php";
                     <ul class="sidebar-sublist">
                         <li class="sidebar-subitem">TM1</li>
                         <li class="sidebar-subitem">TM2</li>
-                        <li class="sidebar-subitem">TM <small>DETI - POX</small></li>
+                        <li class="sidebar-subitem">TM <small>DETI - POk</small></li>
                         <li class="sidebar-subitem">TM <small>DETI - ZAČ</small></li>
                     </ul>
                 </div>
