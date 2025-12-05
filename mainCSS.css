@@ -1,0 +1,275 @@
+/* Všeobecné rozloženie */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.page-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.content-wrapper {
+    flex: 1;
+    display: flex;
+}
+
+/* HEADER */
+header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.logo-img {
+    height: 55px;
+}
+
+/* Menu v headeri (desktop) */
+.custom-link {
+    color: #000 !important;
+    font-weight: 500;
+    margin-right: 18px;
+}
+.custom-link:hover {
+    color: #1c6b3b !important;
+}
+
+.login-btn {
+    background-color: #1c6b3b;
+    color: white !important;
+    padding: 6px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+.login-btn:hover {
+    background-color: #15562f;
+}
+
+/* BURGER BUTTON (mobil) */
+.burger-btn {
+    width: 32px;
+    height: 24px;
+    border: none;
+    background: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0;
+}
+
+.burger-btn span {
+    display: block;
+    height: 3px;
+    border-radius: 3px;
+    background: #000;
+}
+
+/* ASIDE / SIDEBAR – default desktop */
+.sidebar {
+    width: 260px;
+    background-color: #f8f9fa;
+    border-right: 1px solid #e5e5e5;
+    padding: 1.5rem 1rem;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.sidebar-link {
+    text-decoration: none;
+    color: #000;
+    font-weight: 500;
+}
+
+.sidebar-link:hover {
+    color: #1c6b3b;
+}
+
+.sidebar-login {
+    margin-top: 0.75rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    background-color: #1c6b3b;
+    color: #fff;
+    text-align: center;
+}
+
+/* MAIN */
+.main-content {
+    flex: 1;
+    background-color: #ffffff;
+}
+
+/* OVERLAY pre mobilné menu */
+.menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+    z-index: 90;
+}
+
+/* ===== RESPONSIVE – MOBIL ===== */
+@media (max-width: 991.98px) {
+    /* desktop sidebar skryjeme, ale použijeme ho ako vysúvacie menu */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 260px;
+        max-width: 80%;
+        height: 100vh;
+        padding-top: 4.5rem; /* priestor pre header */
+        box-shadow: -2px 0 10px rgba(0,0,0,0.15);
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        z-index: 100;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .menu-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* obsah ide cez celú šírku, bez fixného sidebaru */
+    .content-wrapper {
+        display: block;
+    }
+}
+
+/* ===== RESPONSIVE – DESKTOP ===== */
+@media (min-width: 992px) {
+    .burger-btn {
+        display: none;
+    }
+
+    .menu-overlay {
+        display: none;
+    }
+}
+/* Burger button */
+.burger-btn {
+    width: 32px;
+    height: 24px;
+    border: none;
+    background: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0;
+    z-index: 120; /* aby bolo nad overlay */
+}
+
+.burger-btn span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background: #000;
+    border-radius: 3px;
+    transition: 0.3s ease;
+}
+
+/* ANIMÁCIA – keď je menu otvorené → ZMENA NA X */
+.burger-btn.open span:nth-child(1) {
+    transform: translateY(10px) rotate(45deg);
+}
+
+.burger-btn.open span:nth-child(2) {
+    opacity: 0;
+}
+
+.burger-btn.open span:nth-child(3) {
+    transform: translateY(-10px) rotate(-45deg);
+}
+
+/* ===== Sekcia Hlavné oznamy ===== */
+
+.section-header {
+    margin-bottom: 1.5rem;
+}
+
+.section-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+}
+
+.section-title-underline {
+    height: 1px;
+    width: 180px;
+    background-color: #000000;
+}
+
+/* Karta oznamu */
+.announcement-card {
+    background-color: #ffffff;
+    border-radius: 24px;
+    padding: 24px 32px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+.announcement-title {
+    color: #009688; /* tyrkysová podľa návrhu */
+    font-size: 1.35rem;
+    font-weight: 600;
+}
+
+.announcement-date {
+    font-size: 0.78rem;
+    color: #555555;
+}
+
+/* Obrázok v karte */
+.announcement-image {
+    border-radius: 8px;
+    object-fit: cover;
+    width: 100%;
+}
+
+/* Meta informácie */
+.announcement-meta {
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.meta-label {
+    font-weight: 500;
+}
+
+/* Text oznamu */
+.announcement-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* Autor vpravo dole */
+.announcement-author {
+    font-size: 0.95rem;
+    color: #009688;
+    font-weight: 600;
+}
+
+/* Mobilné úpravy – trocha menšie paddingy a rádius */
+@media (max-width: 575.98px) {
+    .announcement-card {
+        padding: 18px 18px;
+        border-radius: 20px;
+    }
+
+    .section-title {
+        font-size: 1.4rem;
+    }
+}
+.max-width {
+    max-width: 700px;
+}
