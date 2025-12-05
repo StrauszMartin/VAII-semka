@@ -32,6 +32,8 @@ document.querySelectorAll('.accordion-toggle').forEach((btn) => {
     });
 });
 
+
+
 // príprava na prepínanie view podľa sidebaru
 // (momentálne iba konzola – môžeš neskôr napojiť na filter oznamov / redirect)
 document.querySelectorAll('[data-view]').forEach((el) => {

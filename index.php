@@ -1,9 +1,6 @@
 ﻿<?php
 require "db.php";
-$test = "PHP funguje";
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="sk">
@@ -22,14 +19,13 @@ $test = "PHP funguje";
 
 <div class="page-wrapper">
 
-<h1><?php echo $test; ?></h1>
     <!-- HEADER -->
     <header class="py-2">
         <div class="container d-flex align-items-center justify-content-between">
 
             <!-- Logo -->
-            <div>
-                <svg width="109" height="109" viewBox="0 0 109 109" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <div class="site-logo">
+                <svg width="60" height="60" viewBox="0 0 109 109" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <rect width="109" height="109" fill="url(#pattern0_1_1046)"/>
                     <defs>
                     <pattern id="pattern0_1_1046" patternContentUnits="objectBoundingBox" width="1" height="1">
@@ -67,9 +63,27 @@ $test = "PHP funguje";
         <!-- ASIDE / MENU -->
         <aside class="sidebar">
             <nav class="sidebar-nav">
-                <a href="#" class="sidebar-link">Domov</a>
-                <a href="#" class="sidebar-link">Súťaže</a>
-                <a href="#" class="sidebar-link">Kontakt</a>
+                <div class="sidebar-group">
+                    <button class="sidebar-group-toggle" aria-expanded="true">Hlavné oznamy</button>
+                </div>
+
+                <div class="sidebar-group">
+                    <button class="sidebar-group-toggle" aria-expanded="true">Individuálne lekcie <span class="chev">↓</span></button>
+                    <ul class="sidebar-sublist">
+                        <li class="sidebar-subitem"><strong>ŠTT</strong></li>
+                        <li class="sidebar-subitem">LAT</li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-group">
+                    <button class="sidebar-group-toggle" aria-expanded="true">Skupiny <span class="chev">↓</span></button>
+                    <ul class="sidebar-sublist">
+                        <li class="sidebar-subitem">TM1</li>
+                        <li class="sidebar-subitem">TM2</li>
+                        <li class="sidebar-subitem">TM <small>DETI - POX</small></li>
+                        <li class="sidebar-subitem">TM <small>DETI - ZAČ</small></li>
+                    </ul>
+                </div>
             </nav>
         </aside>
 
@@ -145,7 +159,7 @@ $test = "PHP funguje";
 </div>
 
 <!-- Custom JS -->
-<script src="script.js"></script>
 <script src="menuNavigation.js"></script>
+<script src="slideAnim.js"></script>
 </body>
 </html>
