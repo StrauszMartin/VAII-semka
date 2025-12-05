@@ -374,3 +374,63 @@ header {
 :root .mb-3rem {
     margin-bottom: 3rem !important;
 } 
+
+
+
+
+
+.oznam-popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: none; /* skryté default */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.oznam-popup-box {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 450px;
+    max-width: 90%;
+    box-shadow: 0px 10px 30px rgba(0,0,0,0.25);
+}
+
+.oznam-form label {
+    font-weight: bold;
+    margin-top: 10px;
+    display: block;
+}
+
+.oznam-form input,
+.oznam-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.popup-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.btn-save {
+    padding: 8px 16px;
+    background: teal;
+    color: white;
+    border: none;
+    border-radius: 6px;
+}
+
+.btn-cancel {
+    padding: 8px 16px;
+    background: #aaa;
+    color: white;
+    border: none;
+    border-radius: 6px;
+}

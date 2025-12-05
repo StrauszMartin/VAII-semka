@@ -72,7 +72,7 @@ $result = $conn->query($sql);
 
                     <?php if (isset($_SESSION["user_role"]) && ($_SESSION["user_role"] === "admin" || $_SESSION["user_role"] === "trener")): ?>
                         <ul class="sidebar-sublist">
-                            <li class="sidebar-subitem">➕ Pridať oznam</li>
+                            <li class="sidebar-subitem sidebar-subitem-add" style="cursor:pointer;">➕ Pridať oznam</li>
                             <li class="sidebar-subitem">🛠 Správa oznamov</li>
                         </ul>
                     <?php endif; ?>
@@ -121,36 +121,63 @@ $result = $conn->query($sql);
         <?php while ($row = $result->fetch_assoc()): ?>
 <article class="announcement-card | mt-1rem mb-3rem">
 
-    <!-- horný riadok: názov + dátum -->
+    <!-- horný riadok: názov + dátum + delete pre admina -->
     <div class="announcement-card-header d-flex justify-content-between align-items-start mb-3">
         <div>
             <h3 class="announcement-title mb-0">
                 <?php 
-                // automatické zalomenie, ak je názov dlhý
                 echo nl2br(htmlspecialchars($row["nadpis"])); 
                 ?>
             </h3>
         </div>
 
-        <span class="announcement-date">
-            <?php echo date("j. n. Y", strtotime($row["datum"])); ?>
-        </span>
+        <div class="d-flex flex-column align-items-end gap-2">
+
+    <!-- dátum -->
+    <span class="announcement-date">
+        <?php echo date("j. n. Y", strtotime($row["datum"])); ?>
+    </span>
+
+    <!-- ADMIN tlačidlá -->
+    <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+
+        <!-- UPRAVIŤ -->
+        <button 
+            class="btn btn-sm btn-outline-primary edit-btn"
+            data-id="<?php echo $row['id']; ?>"
+            data-nadpis="<?php echo htmlspecialchars($row['nadpis'], ENT_QUOTES); ?>"
+            data-datum="<?php echo $row['datum']; ?>"
+            data-cas="<?php echo htmlspecialchars($row['cas'], ENT_QUOTES); ?>"
+            data-kde="<?php echo htmlspecialchars($row['kde'], ENT_QUOTES); ?>"
+            data-kolko="<?php echo htmlspecialchars($row['kolko'], ENT_QUOTES); ?>"
+            data-popis="<?php echo htmlspecialchars($row['popis'], ENT_QUOTES); ?>"
+            data-autor="<?php echo htmlspecialchars($row['autor'], ENT_QUOTES); ?>"
+        >
+            Upraviť
+        </button>
+
+        <!-- VYMAZAŤ -->
+        <form action="delete_oznam.php" method="post" onsubmit="return confirm('Naozaj chceš zmazať tento oznam?');">
+            <input type="hidden" name="oznam_id" value="<?php echo (int)$row['id']; ?>">
+            <button type="submit" class="btn btn-sm btn-outline-danger">
+                Vymazať
+            </button>
+        </form>
+
+    <?php endif; ?>
+</div>
+
     </div>
 
     <!-- telo karty -->
     <div class="announcement-body row g-4">
-        
-        <!-- obrázok (nemáš v DB – použijeme default alebo nič) -->
         <div class="col-md-4">
-            <img src="<?php echo $row['obrazok'] ?? 'default.jpg'; ?>" 
+            <img src="default.jpg" 
                  alt="<?php echo htmlspecialchars($row["nadpis"]); ?>"
                  class="announcement-image img-fluid">
         </div>
 
-        <!-- textová časť -->
         <div class="col-md-8">
-
-            <!-- meta info v dvoch stĺpcoch -->
             <div class="row">
                 <div class="col-sm-6">
                     <div class="announcement-meta">
@@ -168,18 +195,15 @@ $result = $conn->query($sql);
                 </div>
             </div>
 
-            <!-- popis -->
             <p class="announcement-text mt-3">
                 <?php echo nl2br(htmlspecialchars($row["popis"])); ?>
             </p>
 
-            <!-- autor -->
             <div class="text-end mt-3">
                 <span class="announcement-author">
                     <?php echo htmlspecialchars($row["autor"]); ?>
                 </span>
             </div>
-
         </div>
     </div>
 
@@ -193,7 +217,85 @@ $result = $conn->query($sql);
 
 </div>
 
+<!-- POPUP OVERLAY -->
+<div id="oznam-popup" class="oznam-popup-overlay">
+    <div class="oznam-popup-box">
+
+        <h2>Pridať nový oznam</h2>
+
+        <!-- FORMULAR -->
+        <form action="pridat_oznam.php" method="POST" class="oznam-form">
+            <label>Názov oznamu</label>
+            <input type="text" name="nadpis" required>
+
+            <label>Dátum</label>
+            <input type="date" name="datum" required>
+
+            <label>Čas</label>
+            <input type="text" name="cas">
+
+            <label>Kde</label>
+            <input type="text" name="kde">
+
+            <label>Koľko</label>
+            <input type="text" name="kolko">
+
+            <label>Popis</label>
+            <textarea name="popis" rows="4" required></textarea>
+
+            <label>Autor</label>
+            <input type="text" name="autor" required>
+
+            <div class="popup-buttons">
+                <button type="submit" class="btn-save">Uložiť</button>
+                <button type="button" id="popup-close" class="btn-cancel">Zavrieť</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<div id="oznam-edit-popup" class="oznam-popup-overlay">
+    <div class="oznam-popup-box">
+
+        <h2>Upraviť oznam</h2>
+
+        <form action="upravit_oznam.php" method="POST" class="oznam-form">
+
+            <input type="hidden" name="id" id="edit-id">
+
+            <label>Názov oznamu</label>
+            <input type="text" name="nadpis" id="edit-nadpis" required>
+
+            <label>Dátum</label>
+            <input type="date" name="datum" id="edit-datum" required>
+
+            <label>Čas</label>
+            <input type="text" name="cas" id="edit-cas">
+
+            <label>Kde</label>
+            <input type="text" name="kde" id="edit-kde">
+
+            <label>Koľko</label>
+            <input type="text" name="kolko" id="edit-kolko">
+
+            <label>Popis</label>
+            <textarea name="popis" id="edit-popis" rows="4" required></textarea>
+
+            <label>Autor</label>
+            <input type="text" name="autor" id="edit-autor" required>
+
+            <div class="popup-buttons mt-3">
+                <button type="submit" class="btn-save">Uložiť zmeny</button>
+                <button type="button" id="popup-edit-close" class="btn-cancel">Zavrieť</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
 <!-- Custom JS -->
+<script src="menuNavigationPopUp.js"></script>
 <script src="menuNavigation.js"></script>
 <script src="slideAnim.js"></script>
 </body>
