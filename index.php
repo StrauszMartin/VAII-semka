@@ -82,7 +82,7 @@ $result = $conn->query($sql);
                 <div class="sidebar-group">
                     <button class="sidebar-group-toggle" aria-expanded="true">Individuálne lekcie <span class="chev">↓</span></button>
                     <ul class="sidebar-sublist">
-                        <li class="sidebar-subitem"><strong>ŠTT</strong></li>
+                        <li class="sidebar-subitem">ŠTT</li>
                         <li class="sidebar-subitem">LAT</li>
                     </ul>
                 </div>

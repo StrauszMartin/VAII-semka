@@ -1,5 +1,6 @@
 <?php
 require "../db.php";
+$chyba = isset($_GET['chyba']) ? htmlspecialchars($_GET['chyba']) : "";
 ?>
 
 <!doctype html>
@@ -46,16 +47,12 @@ require "../db.php";
 
             <!-- Login form -->
             <form action="login.php" method="post" class="needs-validation" novalidate>
-                
-                <?php if (!empty($chyba)): ?>
-                <div class="alert alert-danger"><?php echo $chyba; ?></div>
-                <?php endif; ?>
 
-                <div class="mb-3">
-                    <label for="username" class="form-label">Meno</label>
-                    <input type="text" class="form-control" id="username" name="username" required>
-                    <div class="invalid-feedback">Prosím zadajte meno.</div>
-                </div>
+              <div class="mb-3">
+                <label for="username" class="form-label">Meno</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+                <div class="invalid-feedback">Prosím zadajte meno.</div>
+              </div>
 
               <div class="mb-3">
                 <label for="password" class="form-label">Heslo</label>
@@ -68,11 +65,19 @@ require "../db.php";
               </div>
             </form>
 
+            <?php if (!empty($chyba)): ?>
+              <div class="alert alert-danger mt-3">
+                <?php echo $chyba; ?>
+              </div>
+            <?php endif; ?>
+
+
           </div>
         </div>
       </main>
 
     </div>
   </div>
+  <script src="validation.js"></script>
 </body>
 </html>

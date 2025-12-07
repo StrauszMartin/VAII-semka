@@ -25,13 +25,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             header("Location: ../index.php");
             exit;
-        } 
-        else {
-            $chyba = "Zlé heslo!";
-        }
-    } 
-    else {
-        $chyba = "Používateľ neexistuje!";
+        } else {
+        // zlé heslo → presmeruj späť na formulár s chybou
+        $chyba = "Zlé heslo!";
+        header("Location: prihlasovanie.php?chyba=" . urlencode($chyba));
+        exit;
     }
+} else {
+    // používateľ neexistuje → presmeruj späť na formulár s chybou
+    $chyba = "Používateľ neexistuje!";
+    header("Location: prihlasovanie.php?chyba=" . urlencode($chyba));
+    exit;
+}
 }
 ?>
