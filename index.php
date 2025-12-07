@@ -1,6 +1,11 @@
 ﻿<?php
 session_start();
 require 'db.php';
+if (!isset($_SESSION['user_id'])) {
+    header("Location: Prihlasovanie/prihlasovanie.php");
+    exit;
+}
+
 
 $sql = "SELECT * FROM oznamy ORDER BY datum DESC";
 $result = $conn->query($sql);
