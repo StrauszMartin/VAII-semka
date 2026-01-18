@@ -2,28 +2,62 @@
 session_start();
 require 'db.php';
 
-// iba admin môže pridávať oznamy
-if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
+// Oprávnenie 
+$allowedRoles = ['admin', 'trener'];
+
+if (!isset($_SESSION['user_role']) || !in_array($_SESSION['user_role'], $allowedRoles, true)) {
+    http_response_code(403);
     die("Nemáš oprávnenie pridávať oznamy.");
 }
 
-// prijatie údajov z formulára
-$nadpis = $_POST['nadpis'];
-$datum  = $_POST['datum'];
-$cas    = $_POST['cas'];
-$kde    = $_POST['kde'];
-$kolko  = $_POST['kolko'];
-$popis  = $_POST['popis'];
-$autor  = $_POST['autor'];
+// Povolené typy oznamov
+$allowedTypes = ['HO', 'TM1', 'TM2', 'POK', 'ZAC'];
 
-// pripravený INSERT
-$sql = "INSERT INTO oznamy (nadpis, datum, cas, kde, kolko, popis, autor)
-        VALUES (?, ?, ?, ?, ?, ?, ?)";
+// Typ oznamu prichádza z formulára (na stránke skupiny je nastavený automaticky)
+$typOznamu = $_POST['TypOznamu'] ?? 'HO';
+if (!in_array($typOznamu, $allowedTypes, true)) {
+    $typOznamu = 'HO';
+}
+
+// Kam sa po uložení vrátiť (index alebo skupinová stránka)
+$returnUrl = $_POST['return_url'] ?? 'index.php';
+
+// základná ochrana proti externým redirectom
+if (strpos($returnUrl, '://') !== false) {
+    $returnUrl = 'index.php';
+}
+
+// Načítanie dát z formulára
+$nadpis = trim($_POST['nadpis'] ?? '');
+$datum  = $_POST['datum'] ?? '';
+$cas    = trim($_POST['cas'] ?? '');
+$kde    = trim($_POST['kde'] ?? '');
+$kolko  = trim($_POST['kolko'] ?? '');
+$popis  = trim($_POST['popis'] ?? '');
+$autor  = trim($_POST['autor'] ?? '');
+
+// Minimálna validácia (uprav podľa požiadaviek)
+if ($nadpis === '' || $datum === '' || $popis === '' || $autor === '') {
+    // ak chceš, môžeš sem dať session error a vrátiť späť
+    header("Location: $returnUrl");
+    exit;
+}
+
+// INSERT do DB
+$sql = "INSERT INTO oznamy (nadpis, datum, cas, kde, kolko, popis, autor, TypOznamu)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("sssssss", $nadpis, $datum, $cas, $kde, $kolko, $popis, $autor);
-$stmt->execute();
+if (!$stmt) {
+    die("Chyba SQL prepare: " . $conn->error);
+}
 
-// späť na hlavnú stránku
-header("Location: index.php");
+$stmt->bind_param("ssssssss", $nadpis, $datum, $cas, $kde, $kolko, $popis, $autor, $typOznamu);
+
+if (!$stmt->execute()) {
+    die("Chyba pri ukladaní oznamu: " . $stmt->error);
+}
+
+// Redirect späť na stránku, kde sa oznam pridával (skupina alebo hlavné oznamy)
+header("Location: $returnUrl");
 exit;

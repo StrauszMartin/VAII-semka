@@ -7,8 +7,12 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 
-$sql = "SELECT * FROM oznamy ORDER BY datum DESC";
-$result = $conn->query($sql);
+$typ = 'HO';
+$sql = "SELECT * FROM oznamy WHERE TypOznamu = ? ORDER BY datum DESC";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $typ);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -95,11 +99,12 @@ $result = $conn->query($sql);
                 <div class="sidebar-group">
                     <button class="sidebar-group-toggle" aria-expanded="true">Skupiny <span class="chev">↓</span></button>
                     <ul class="sidebar-sublist">
-                        <li class="sidebar-subitem">TM1</li>
-                        <li class="sidebar-subitem">TM2</li>
-                        <li class="sidebar-subitem">TM <small>DETI - POk</small></li>
-                        <li class="sidebar-subitem">TM <small>DETI - ZAČ</small></li>
+                        <li class="sidebar-subitem"><a class="sidebar-link" href="oznamy_skupina.php?typ=TM1">TM1</a></li>
+                        <li class="sidebar-subitem"><a class="sidebar-link" href="oznamy_skupina.php?typ=TM2">TM2</a></li>
+                        <li class="sidebar-subitem"><a class="sidebar-link" href="oznamy_skupina.php?typ=POK">TM DETI<small>Pokrčilí</small></a></li>
+                        <li class="sidebar-subitem"><a class="sidebar-link" href="oznamy_skupina.php?typ=ZAC">TM DETI<small>Začitočníci</small></a></li>
                     </ul>
+
                 </div>
             </nav>
 
@@ -230,6 +235,9 @@ $result = $conn->query($sql);
 
         <!-- FORMULAR -->
         <form action="pridat_oznam.php" method="POST" class="oznam-form">
+            <input type="hidden" name="TypOznamu" value="HO">
+            <input type="hidden" name="return_url" value="index.php">
+            
             <label>Názov oznamu</label>
             <input type="text" name="nadpis" required>
 

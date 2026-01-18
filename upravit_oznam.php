@@ -6,6 +6,9 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
     die("Nemáš oprávnenie.");
 }
 
+$returnUrl = $_POST['return_url'] ?? 'index.php';
+if (strpos($returnUrl, '://') !== false) $returnUrl = 'index.php';
+
 $id     = $_POST['id'];
 $nadpis = $_POST['nadpis'];
 $datum  = $_POST['datum'];
@@ -20,10 +23,8 @@ $sql = "UPDATE oznamy
         WHERE id=?";
 
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("sssssssi", 
-    $nadpis, $datum, $cas, $kde, $kolko, $popis, $autor, $id
-);
+$stmt->bind_param("sssssssi", $nadpis, $datum, $cas, $kde, $kolko, $popis, $autor, $id);
 $stmt->execute();
 
-header("Location: index.php");
+header("Location: $returnUrl");
 exit;
