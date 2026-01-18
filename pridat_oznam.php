@@ -13,16 +13,16 @@ if (!isset($_SESSION['user_role']) || !in_array($_SESSION['user_role'], $allowed
 // Povolené typy oznamov
 $allowedTypes = ['HO', 'TM1', 'TM2', 'POK', 'ZAC'];
 
-// Typ oznamu prichádza z formulára (na stránke skupiny je nastavený automaticky)
+// Typ oznamu prichádza z formulára 
 $typOznamu = $_POST['TypOznamu'] ?? 'HO';
 if (!in_array($typOznamu, $allowedTypes, true)) {
     $typOznamu = 'HO';
 }
 
-// Kam sa po uložení vrátiť (index alebo skupinová stránka)
+// Kam sa po uložení vrátiť 
 $returnUrl = $_POST['return_url'] ?? 'index.php';
 
-// základná ochrana proti externým redirectom
+
 if (strpos($returnUrl, '://') !== false) {
     $returnUrl = 'index.php';
 }
@@ -36,9 +36,8 @@ $kolko  = trim($_POST['kolko'] ?? '');
 $popis  = trim($_POST['popis'] ?? '');
 $autor  = trim($_POST['autor'] ?? '');
 
-// Minimálna validácia (uprav podľa požiadaviek)
+// Minimálna validácia 
 if ($nadpis === '' || $datum === '' || $popis === '' || $autor === '') {
-    // ak chceš, môžeš sem dať session error a vrátiť späť
     header("Location: $returnUrl");
     exit;
 }
@@ -58,6 +57,6 @@ if (!$stmt->execute()) {
     die("Chyba pri ukladaní oznamu: " . $stmt->error);
 }
 
-// Redirect späť na stránku, kde sa oznam pridával (skupina alebo hlavné oznamy)
+// Redirect späť na stránku, kde sa oznam pridával (
 header("Location: $returnUrl");
 exit;
