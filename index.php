@@ -22,10 +22,7 @@ $result = $stmt->get_result();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Top Dance Žilina</title>
 
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles -->
     <link rel="stylesheet" href="mainCSS.css">
 </head>
 <body>
@@ -50,12 +47,12 @@ $result = $stmt->get_result();
 
             </div>
 
-            <!-- Desktop navigation -->
             <nav class="d-none d-lg-flex align-items-center">
-                <a class="nav-link custom-link" href="#">Domov</a>
-                <a class="nav-link custom-link" href="#">Súťaže</a>
-                <a class="nav-link custom-link" href="#">Kontakt</a>
+                <a class="nav-link custom-link" href="index.php">Domov</a>
+                <a class="nav-link custom-link" href="https://szts.ksis.eu/menu.php?akcia=KS">Súťaže</a>
+                <a class="nav-link custom-link" href="kontakt.php">Kontakt</a>
             </nav>
+
 
             <!-- Burger button (mobile) -->
             <button id="menuToggle" class="burger-btn d-lg-none" aria-label="Otvoriť menu">
@@ -82,7 +79,6 @@ $result = $stmt->get_result();
                     <?php if (isset($_SESSION["user_role"]) && ($_SESSION["user_role"] === "admin" || $_SESSION["user_role"] === "trener")): ?>
                         <ul class="sidebar-sublist">
                             <li class="sidebar-subitem sidebar-subitem-add" style="cursor:pointer;">➕ Pridať oznam</li>
-                            <li class="sidebar-subitem">🛠 Správa oznamov</li>
                         </ul>
                     <?php endif; ?>
                 </div>
@@ -109,12 +105,12 @@ $result = $stmt->get_result();
             </nav>
 
             <?php if (isset($_SESSION['user_role'])): ?>
-    <div class="sidebar-footer">
-        <form action="Prihlasovanie/logout.php" method="post">
-            <button type="submit" class="sidebar-logout-btn">Odhlásiť</button>
-        </form>
-    </div>
-<?php endif; ?>
+                <div class="sidebar-footer">
+                    <form action="Prihlasovanie/logout.php" method="post">
+                        <button type="submit" class="sidebar-logout-btn">Odhlásiť</button>
+                    </form>
+                </div>
+            <?php endif; ?>
         </aside>
 
         <!-- MAIN CONTENT -->
@@ -237,7 +233,7 @@ $result = $stmt->get_result();
         <form action="pridat_oznam.php" method="POST" class="oznam-form">
             <input type="hidden" name="TypOznamu" value="HO">
             <input type="hidden" name="return_url" value="index.php">
-            
+
             <label>Názov oznamu</label>
             <input type="text" name="nadpis" required>
 
