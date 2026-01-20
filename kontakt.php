@@ -1,6 +1,46 @@
 <?php
 session_start();
 
+$formSuccess = "";
+$formError = "";
+
+$name = "";
+$email = "";
+$message = "";
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $name = trim($_POST["name"] ?? "");
+    $email = trim($_POST["email"] ?? "");
+    $message = trim($_POST["message"] ?? "");
+
+    if ($name === "" || $email === "" || $message === "") {
+        $formError = "Vyplň všetky polia.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $formError = "Zadaj platný e-mail.";
+    } else {
+        $to = "mstrausz94@gmail.com";
+        $subject = "Kontakt formulár – Top Dance Žilina";
+        $body =
+            "Meno a priezvisko: $name\n" .
+            "E-mail: $email\n\n" .
+            "Správa:\n$message";
+
+        $headers =
+            "From: noreply@topdance.local\r\n" .
+            "Reply-To: $email\r\n" .
+            "Content-Type: text/plain; charset=UTF-8";
+
+        if (@mail($to, $subject, $body, $headers)) {
+            $formSuccess = "Správa bola úspešne odoslaná.";
+            // vyčisti formulár
+            $name = "";
+            $email = "";
+            $message = "";
+        } else {
+            $formError = "Správu sa nepodarilo odoslať.";
+        }
+    }
+}
 
 $trainers = [
     [
@@ -179,8 +219,61 @@ $trainers = [
                 </div>
 
             </div>
-        </main>
+            <!-- oznamy po odoslaní -->
+            <?php if ($formSuccess !== ""): ?>
+                <div class="alert alert-success mt-4">
+                    <?php echo htmlspecialchars($formSuccess); ?>
+                </div>
+            <?php endif; ?>
 
+            <?php if ($formError !== ""): ?>
+                <div class="alert alert-danger mt-4">
+                    <?php echo htmlspecialchars($formError); ?>
+                </div>
+            <?php endif; ?>
+            <!-- kontaktný formulár -->
+            <div class="announcement-card mt-4">
+                <div class="p-4">
+                    <h5 class="mb-3">Napíš nám</h5>
+
+                    <form method="post" action="kontakt.php">
+                        <div class="mb-3">
+                            <label class="form-label">Meno a priezvisko</label>
+                            <input
+                                type="text"
+                                name="name"
+                                class="form-control"
+                                required
+                                value="<?php echo htmlspecialchars($name); ?>"
+                            >
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">E-mail</label>
+                            <input
+                                type="email"
+                                name="email"
+                                class="form-control"
+                                required
+                                value="<?php echo htmlspecialchars($email); ?>"
+                            >
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Správa</label>
+                            <textarea
+                            name="message"
+                            class="form-control"
+                            rows="5"
+                            required
+                            ><?php echo htmlspecialchars($message); ?></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            Odoslať
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </main>
     </div>
 </div>
 
