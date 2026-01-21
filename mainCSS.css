@@ -13,13 +13,24 @@ html, body {
 .content-wrapper {
     flex: 1;
     display: flex;
+    margin-top: var(--header-h);
 }
+:root{
+    --header-h: 77px;
+}
+
 
 /* HEADER */
 header {
-    background-color: #ffffff;
-    border-bottom: 1px solid #e5e5e5;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--header-h);
+    background: #fff;
+    z-index: 3000;
 }
+
 
 .logo-img {
     height: 55px;
@@ -69,16 +80,15 @@ header {
 
 /* ASIDE / SIDEBAR – default desktop */
 .sidebar {
-    /* Narrow, panel-style sidebar like the provided design */
-    width: 250px; /* updated: wider aside per request */
-    background-color: #e9f6f9; /* light-blue background */
+    width: 250px; 
+    background-color: #e9f6f9; 
     padding: 0.6rem 0.8rem;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    position: sticky;
-    top: 0;
-    max-height: calc(100vh - 77px);
+    position: static;
+    top: auto;
+    max-height: auto;
     overflow: hidden;
 }
 
@@ -88,15 +98,14 @@ header {
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
-    position: sticky;
-    top: 0;
-    
+    position: static;
 }
 
 .sidebar-footer {
-    margin-top: 0.75rem;
+    margin-top: auto; 
     padding-top: 0.5rem;
 }
+
 
 .sidebar-logout-btn {
     width: 100%;
@@ -233,10 +242,33 @@ header {
         display: none;
     }
 
-    .sidebar {
-        position: sticky;
+    .sidebar{
+        position: fixed;
+        top: var(--header-h);
+        left: 0;
+        width: 250px;
+        height: calc(100vh - var(--header-h));
+        max-height: calc(100vh - var(--header-h));
+        overflow: hidden;
+        z-index: 1000;
+    }
+
+
+    .content-wrapper {
+        padding-left: 250px;
+    }
+
+    .sidebar-nav {
+        flex: 1 1 auto;
+        overflow-y: auto;
+    }
+
+    .sidebar-footer {
+        margin-top: auto;
     }
 }
+
+
 /* Burger button */
 .burger-btn {
     width: 32px;
@@ -386,7 +418,7 @@ header {
     display: none; /* skryté default */
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 5000;
 }
 
 .oznam-popup-box {

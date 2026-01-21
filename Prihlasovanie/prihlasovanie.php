@@ -1,6 +1,8 @@
 <?php
 require "../db.php";
 $chyba = isset($_GET['chyba']) ? htmlspecialchars($_GET['chyba']) : "";
+$ok = isset($_GET['ok']) ? htmlspecialchars($_GET['ok']) : "";
+
 ?>
 
 <!doctype html>
@@ -63,7 +65,17 @@ $chyba = isset($_GET['chyba']) ? htmlspecialchars($_GET['chyba']) : "";
               <div class="d-grid">
                 <button type="submit" class="btn btn-primary">Prihlásiť</button>
               </div>
+              <div class="text-center mt-3 small">
+                Nemáte účet? <a href="../Registracia/registracia.php">Registrovať sa</a>
+              </div>
+
             </form>
+
+			<?php if (!empty($ok)): ?>
+              <div class="alert alert-success mt-3">
+                <?php echo $ok; ?>
+              </div>
+            <?php endif; ?>
 
             <?php if (!empty($chyba)): ?>
               <div class="alert alert-danger mt-3">
@@ -71,7 +83,7 @@ $chyba = isset($_GET['chyba']) ? htmlspecialchars($_GET['chyba']) : "";
               </div>
             <?php endif; ?>
 
-
+            
           </div>
         </div>
       </main>
