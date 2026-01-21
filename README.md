@@ -1,4 +1,4 @@
-#Disclaimer - AI
+# Disclaimer - AI
 Počas tvorby tejto webovej aplikácie bola použitá generatívna AI. Používal som ju na konzultáciu, na učenie sa, pomohla s JS funkciami, na identifikáciu inych problémov. Ako daľšie zdroje na vzdelávanie som používal aj stack-overflow, w3schools alebo youtube tutorialy na pochopenie problematiky.
 
 # Top Dance Žilina – Semestrálna práca (VAII)
