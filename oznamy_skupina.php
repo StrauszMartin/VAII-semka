@@ -165,12 +165,15 @@ $result = $stmt->get_result();
 
                         <div class="announcement-body row g-4">
                             <div class="col-md-4">
-                                <img src="default.jpg"
-                                     alt="<?php echo htmlspecialchars($row["nadpis"]); ?>"
-                                     class="announcement-image img-fluid">
+                                <?php
+                                    $imgPath = (!empty($row['foto_path'])) ? $row['foto_path'] : 'uploads/oznamy/default.png';
+                                ?>
+                                <img src="<?php echo htmlspecialchars($imgPath, ENT_QUOTES); ?>"
+                                alt="<?php echo htmlspecialchars($row['nadpis']); ?>"
+                                class="announcement-image img-fluid">
                             </div>
 
-                            <div class="col-md-8">
+                            <div class="col-md-8 d-flex flex-column">
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="announcement-meta">
@@ -192,7 +195,7 @@ $result = $stmt->get_result();
                                     <?php echo nl2br(htmlspecialchars($row["popis"])); ?>
                                 </p>
 
-                                <div class="text-end mt-3">
+                                <div class="text-end mt-auto pt-3">
                                     <span class="announcement-author">
                                         <?php echo htmlspecialchars($row["autor"]); ?>
                                     </span>
@@ -213,7 +216,7 @@ $result = $stmt->get_result();
     <div class="oznam-popup-box">
         <h2>Pridať nový oznam</h2>
 
-        <form action="pridat_oznam.php" method="POST" class="oznam-form">
+        <form action="pridat_oznam.php" method="POST" class="oznam-form" enctype="multipart/form-data">
             <input type="hidden" name="TypOznamu" value="<?php echo htmlspecialchars($typ, ENT_QUOTES); ?>">
             <input type="hidden" name="return_url" value="<?php echo htmlspecialchars($returnUrl, ENT_QUOTES); ?>">
 
@@ -235,8 +238,8 @@ $result = $stmt->get_result();
             <label>Popis</label>
             <textarea name="popis" rows="4" required></textarea>
 
-            <label>Autor</label>
-            <input type="text" name="autor" required>
+            <label>Fotka (voliteľné)</label>
+            <input type="file" name="foto" accept="image/*">    
 
             <div class="popup-buttons">
                 <button type="submit" class="btn-save">Uložiť</button>
@@ -272,9 +275,6 @@ $result = $stmt->get_result();
 
             <label>Popis</label>
             <textarea name="popis" id="edit-popis" rows="4" required></textarea>
-
-            <label>Autor</label>
-            <input type="text" name="autor" id="edit-autor" required>
 
             <div class="popup-buttons">
                 <button type="submit" class="btn-save">Uložiť zmeny</button>
