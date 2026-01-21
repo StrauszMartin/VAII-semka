@@ -147,6 +147,7 @@ $result = $stmt->get_result();
 
         <!-- UPRAVIŤ -->
         <button 
+            type="button"
             class="btn btn-sm btn-outline-primary edit-btn"
             data-id="<?php echo $row['id']; ?>"
             data-nadpis="<?php echo htmlspecialchars($row['nadpis'], ENT_QUOTES); ?>"
@@ -155,7 +156,6 @@ $result = $stmt->get_result();
             data-kde="<?php echo htmlspecialchars($row['kde'], ENT_QUOTES); ?>"
             data-kolko="<?php echo htmlspecialchars($row['kolko'], ENT_QUOTES); ?>"
             data-popis="<?php echo htmlspecialchars($row['popis'], ENT_QUOTES); ?>"
-            data-autor="<?php echo htmlspecialchars($row['autor'], ENT_QUOTES); ?>"
         >
             Upraviť
         </button>
@@ -163,6 +163,7 @@ $result = $stmt->get_result();
         <!-- VYMAZAŤ -->
         <form action="delete_oznam.php" method="post" onsubmit="return confirm('Naozaj chceš zmazať tento oznam?');">
             <input type="hidden" name="oznam_id" value="<?php echo (int)$row['id']; ?>">
+            <input type="hidden" name="return_url" value="index.php">
             <button type="submit" class="btn btn-sm btn-outline-danger">
                 Vymazať
             </button>
@@ -208,7 +209,7 @@ $result = $stmt->get_result();
 
             <div class="text-end mt-auto pt-3">
                 <span class="announcement-author">
-                    <?php echo htmlspecialchars($row["autor"]); ?>
+                    <?php echo htmlspecialchars($row["autor_meno"] ?? "-"); ?>
                 </span>
             </div>
         </div>
@@ -271,6 +272,8 @@ $result = $stmt->get_result();
         <h2>Upraviť oznam</h2>
 
         <form action="upravit_oznam.php" method="POST" class="oznam-form">
+
+            <input type="hidden" name="return_url" value="index.php">
 
             <input type="hidden" name="id" id="edit-id">
 

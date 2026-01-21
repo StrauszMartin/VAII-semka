@@ -2,27 +2,29 @@
 session_start();
 require 'db.php';
 
-// Oprávnenie 
+// Oprávnenie
 $allowedRoles = ['admin', 'trener'];
-
 if (!isset($_SESSION['user_role']) || !in_array($_SESSION['user_role'], $allowedRoles, true)) {
     http_response_code(403);
     die("Nemáš oprávnenie pridávať oznamy.");
 }
 
+// Autor = prihlásený používateľ
+if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);
+    die("Nie si prihlásený.");
+}
+$autorId = (int)$_SESSION['user_id'];
+
 // Povolené typy oznamov
 $allowedTypes = ['HO', 'TM1', 'TM2', 'POK', 'ZAC'];
-
-// Typ oznamu prichádza z formulára 
 $typOznamu = $_POST['TypOznamu'] ?? 'HO';
 if (!in_array($typOznamu, $allowedTypes, true)) {
     $typOznamu = 'HO';
 }
 
-// Kam sa po uložení vrátiť 
+// Kam sa po uložení vrátiť
 $returnUrl = $_POST['return_url'] ?? 'index.php';
-
-
 if (strpos($returnUrl, '://') !== false) {
     $returnUrl = 'index.php';
 }
@@ -34,29 +36,65 @@ $cas    = trim($_POST['cas'] ?? '');
 $kde    = trim($_POST['kde'] ?? '');
 $kolko  = trim($_POST['kolko'] ?? '');
 $popis  = trim($_POST['popis'] ?? '');
-$autor  = trim($_POST['autor'] ?? '');
 
-// Minimálna validácia 
-if ($nadpis === '' || $datum === '' || $popis === '' || $autor === '') {
+// Minimálna validácia
+if ($nadpis === '' || $datum === '' || $popis === '') {
     header("Location: $returnUrl");
     exit;
 }
 
-// INSERT do DB
-$sql = "INSERT INTO oznamy (nadpis, datum, cas, kde, kolko, popis, autor, TypOznamu)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+// Default fotka
+$fotoPath = 'uploads/oznamy/default.png';
+
+// Upload fotky (ak bola priložená)
+if (
+    isset($_FILES['foto']) &&
+    $_FILES['foto']['error'] === UPLOAD_ERR_OK &&
+    $_FILES['foto']['size'] > 0
+) {
+    $uploadDir = 'uploads/oznamy/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true);
+    }
+
+    $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
+    $allowedExt = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+
+    if (in_array($ext, $allowedExt, true)) {
+        $fileName = uniqid('oznam_', true) . '.' . $ext;
+        $fullPath = $uploadDir . $fileName;
+
+        if (move_uploaded_file($_FILES['foto']['tmp_name'], $fullPath)) {
+            $fotoPath = $fullPath;
+        }
+    }
+}
+
+// INSERT do DB (autor_id je FK na users.ID)
+$sql = "INSERT INTO oznamy (nadpis, datum, cas, kde, kolko, popis, autor_id, TypOznamu, foto_path)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 $stmt = $conn->prepare($sql);
 if (!$stmt) {
     die("Chyba SQL prepare: " . $conn->error);
 }
 
-$stmt->bind_param("ssssssss", $nadpis, $datum, $cas, $kde, $kolko, $popis, $autor, $typOznamu);
+$stmt->bind_param(
+    'ssssssiss',
+    $nadpis,
+    $datum,
+    $cas,
+    $kde,
+    $kolko,
+    $popis,
+    $autorId,
+    $typOznamu,
+    $fotoPath
+);
 
 if (!$stmt->execute()) {
     die("Chyba pri ukladaní oznamu: " . $stmt->error);
 }
 
-// Redirect späť na stránku, kde sa oznam pridával (
 header("Location: $returnUrl");
 exit;

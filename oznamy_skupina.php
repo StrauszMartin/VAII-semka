@@ -18,8 +18,14 @@ if (!isset($allowed[$typ])) {
 $pageTitle = "Oznamy - " . $allowed[$typ];
 $returnUrl = "oznamy_skupina.php?typ=" . urlencode($typ);
 
-// SELECT filtrovaný podľa typu
-$sql = "SELECT * FROM oznamy WHERE TypOznamu = ? ORDER BY datum DESC";
+// SELECT filtrovaný podľa typu + autor z tabuľky users
+$sql = "
+    SELECT o.*, CONCAT(u.MENO, ' ', u.PRIEZVISKO) AS autor_meno
+    FROM oznamy o
+    LEFT JOIN users u ON u.ID = o.autor_id
+    WHERE o.TypOznamu = ?
+    ORDER BY o.datum DESC
+";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $typ);
 $stmt->execute();
@@ -140,6 +146,7 @@ $result = $stmt->get_result();
                                 <?php if (isset($_SESSION['user_role']) && ($_SESSION['user_role'] === 'admin' || $_SESSION['user_role'] === 'trener')): ?>
 
                                     <button
+                                        type="button"
                                         class="btn btn-sm btn-outline-primary edit-btn"
                                         data-id="<?php echo $row['id']; ?>"
                                         data-nadpis="<?php echo htmlspecialchars($row['nadpis'], ENT_QUOTES); ?>"
@@ -148,7 +155,6 @@ $result = $stmt->get_result();
                                         data-kde="<?php echo htmlspecialchars($row['kde'], ENT_QUOTES); ?>"
                                         data-kolko="<?php echo htmlspecialchars($row['kolko'], ENT_QUOTES); ?>"
                                         data-popis="<?php echo htmlspecialchars($row['popis'], ENT_QUOTES); ?>"
-                                        data-autor="<?php echo htmlspecialchars($row['autor'], ENT_QUOTES); ?>"
                                     >
                                         Upraviť
                                     </button>
@@ -197,7 +203,7 @@ $result = $stmt->get_result();
 
                                 <div class="text-end mt-auto pt-3">
                                     <span class="announcement-author">
-                                        <?php echo htmlspecialchars($row["autor"]); ?>
+                                        <?php echo htmlspecialchars($row["autor_meno"] ?? "-"); ?>
                                     </span>
                                 </div>
                             </div>

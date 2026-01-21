@@ -44,16 +44,16 @@ $ok = isset($_GET['ok']) ? htmlspecialchars($_GET['ok']) : "";
               </div>
 
               <h2 class="h4 mb-1">Prihlásenie</h2>
-              <p class="text-muted small mb-0">Zadajte svoje meno a heslo</p>
+              <p class="text-muted small mb-0">Zadajte svoj email a heslo</p>
             </div>
 
             <!-- Login form -->
             <form action="login.php" method="post" class="needs-validation" novalidate>
 
               <div class="mb-3">
-                <label for="username" class="form-label">Meno</label>
+                <label for="username" class="form-label">Email</label>
                 <input type="text" class="form-control" id="username" name="username" required>
-                <div class="invalid-feedback">Prosím zadajte meno.</div>
+                <div class="invalid-feedback">Prosím zadajte email.</div>
               </div>
 
               <div class="mb-3">

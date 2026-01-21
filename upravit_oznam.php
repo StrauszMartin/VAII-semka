@@ -16,14 +16,13 @@ $cas    = $_POST['cas'];
 $kde    = $_POST['kde'];
 $kolko  = $_POST['kolko'];
 $popis  = $_POST['popis'];
-$autor  = $_POST['autor'];
 
 $sql = "UPDATE oznamy
-        SET nadpis=?, datum=?, cas=?, kde=?, kolko=?, popis=?, autor=?
+        SET nadpis=?, datum=?, cas=?, kde=?, kolko=?, popis=?
         WHERE id=?";
 
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("sssssssi", $nadpis, $datum, $cas, $kde, $kolko, $popis, $autor, $id);
+$stmt->bind_param("ssssssi", $nadpis, $datum, $cas, $kde, $kolko, $popis, $id);
 $stmt->execute();
 
 header("Location: $returnUrl");

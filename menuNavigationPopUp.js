@@ -20,24 +20,28 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-
+    
     const editPopup = document.getElementById("oznam-edit-popup");
     const editCloseBtn = document.getElementById("popup-edit-close");
 
-    // Po kliknutí na Upraviť
-    document.querySelectorAll(".edit-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
+    if (!editPopup) return;
 
-            document.getElementById("edit-id").value = btn.dataset.id;
-            document.getElementById("edit-nadpis").value = btn.dataset.nadpis;
-            document.getElementById("edit-datum").value = btn.dataset.datum;
-            document.getElementById("edit-cas").value = btn.dataset.cas;
-            document.getElementById("edit-kde").value = btn.dataset.kde;
-            document.getElementById("edit-kolko").value = btn.dataset.kolko;
-            document.getElementById("edit-popis").value = btn.dataset.popis;
+    // Delegovaný handler (funguje aj keď sa tlačidlá vyrenderujú neskôr alebo sa menia)
+    document.addEventListener("click", (e) => {
+        const btn = e.target.closest?.(".edit-btn");
+        if (!btn) return;
 
-            editPopup.style.display = "flex";
-        });
+        const byId = (id) => document.getElementById(id);
+
+        byId("edit-id").value = btn.dataset.id || "";
+        byId("edit-nadpis").value = btn.dataset.nadpis || "";
+        byId("edit-datum").value = btn.dataset.datum || "";
+        byId("edit-cas").value = btn.dataset.cas || "";
+        byId("edit-kde").value = btn.dataset.kde || "";
+        byId("edit-kolko").value = btn.dataset.kolko || "";
+        byId("edit-popis").value = btn.dataset.popis || "";
+
+        editPopup.style.display = "flex";
     });
 
     // Zavrieť popup
