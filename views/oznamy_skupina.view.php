@@ -66,6 +66,11 @@
                 <div class="sidebar-group">
                     <a class="sidebar-group-toggle sidebar-link" href="sutaze.php">Preferované súťaže</a>
                 </div>
+
+                <div class="sidebar-group">
+                    <a class="sidebar-group-toggle sidebar-link" href="pary.php">Tanečné páry</a>
+                </div>
+                
             </nav>
 
             <?php if (isset($_SESSION['user_role'])): ?>

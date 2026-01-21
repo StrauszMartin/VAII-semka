@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="sk">
 <head>
@@ -48,26 +47,27 @@
 
         </div>
     </header>
-
-    <!-- OVERLAY pre mobilné menu -->
     <div id="overlay" class="menu-overlay"></div>
 
-    <!-- CONTENT -->
     <div class="content-wrapper">
-        <!-- ASIDE / MENU -->
+
+        <!-- SIDEBAR -->
         <aside class="sidebar">
             <nav class="sidebar-nav">
+
                 <div class="sidebar-group">
                     <a class="sidebar-group-toggle sidebar-link" href="index.php">Hlavné oznamy</a>
                 </div>
 
                 <div class="sidebar-group">
-                    <button class="sidebar-group-toggle" aria-expanded="true">Skupiny <span class="chev">↓</span></button>
+                    <button class="sidebar-group-toggle" aria-expanded="true">
+                        Skupiny <span class="chev">↓</span>
+                    </button>
                     <ul class="sidebar-sublist">
                         <li class="sidebar-subitem"><a class="sidebar-link" href="oznamy_skupina.php?typ=TM1">TM1</a></li>
                         <li class="sidebar-subitem"><a class="sidebar-link" href="oznamy_skupina.php?typ=TM2">TM2</a></li>
-                        <li class="sidebar-subitem"><a class="sidebar-link" href="oznamy_skupina.php?typ=POK">TM DETI<small>Pokrčilí</small></a></li>
-                        <li class="sidebar-subitem"><a class="sidebar-link" href="oznamy_skupina.php?typ=ZAC">TM DETI<small>Začitočníci</small></a></li>
+                        <li class="sidebar-subitem"><a class="sidebar-link" href="oznamy_skupina.php?typ=POK">TM DETI – POK</a></li>
+                        <li class="sidebar-subitem"><a class="sidebar-link" href="oznamy_skupina.php?typ=ZAC">TM DETI – ZAČ</a></li>
                     </ul>
                 </div>
 
@@ -78,8 +78,6 @@
                 <div class="sidebar-group">
                     <a class="sidebar-group-toggle sidebar-link" href="pary.php">Tanečné páry</a>
                 </div>
-
-
             </nav>
 
             <?php if (isset($_SESSION['user_role'])): ?>
@@ -93,206 +91,110 @@
 
         <!-- MAIN CONTENT -->
         <main class="main-content py-4">
-    <div class="container max-width">
+            <div class="container max-width">
 
-        <!-- Nadpis sekcie -->
-        <?php $canManageHeader = isset($_SESSION['user_role']) && in_array($_SESSION['user_role'], ['admin','trener'], true); ?>
-
-        <div class="section-header section-header-flex mb-4">
-            <div>
-                <h2 class="section-title">Hlavné oznamy</h2>
-                <div class="section-title-underline"></div>
-            </div>
-
-            <?php if ($canManageHeader): ?>
-                <button type="button" class="btn-add-oznam" id="add-oznam-btn">➕ Pridať oznam</button>
-            <?php endif; ?>
-        </div>
-
-
-        <!-- KARTA OZNAMU -->
-        <?php foreach ($oznamy as $row): ?>
-<article class="announcement-card | mt-1rem mb-3rem">
-
-    <!-- horný riadok: názov + dátum + delete pre admina -->
-    <div class="announcement-card-header d-flex justify-content-between align-items-start mb-3">
-        <div>
-            <h3 class="announcement-title mb-0">
-                <?php 
-                echo nl2br(htmlspecialchars($row["nadpis"])); 
+                <?php
+                $canManage = isset($_SESSION['user_role']) &&
+                    in_array($_SESSION['user_role'], ['admin', 'trener'], true);
                 ?>
-            </h3>
-        </div>
 
-        <div class="d-flex flex-column align-items-end gap-2">
-
-    <!-- dátum -->
-    <span class="announcement-date">
-        <?php echo date("j. n. Y", strtotime($row["datum"])); ?>
-    </span>
-
-    <!-- ADMIN tlačidlá -->
-            <?php
-	            $canManage = isset($_SESSION['user_role']) && in_array($_SESSION['user_role'], ['admin', 'trener'], true);
-	        ?>
-
-    <?php if ($canManage): ?>
-        <!-- UPRAVIŤ -->
-        <button 
-            type="button"
-            class="btn btn-sm btn-outline-primary edit-btn"
-            data-id="<?php echo $row['id']; ?>"
-            data-nadpis="<?php echo htmlspecialchars($row['nadpis'], ENT_QUOTES); ?>"
-            data-datum="<?php echo $row['datum']; ?>"
-            data-cas="<?php echo htmlspecialchars($row['cas'], ENT_QUOTES); ?>"
-            data-kde="<?php echo htmlspecialchars($row['kde'], ENT_QUOTES); ?>"
-            data-kolko="<?php echo htmlspecialchars($row['kolko'], ENT_QUOTES); ?>"
-            data-popis="<?php echo htmlspecialchars($row['popis'], ENT_QUOTES); ?>"
-        >
-            Upraviť
-        </button>
-
-        <!-- VYMAZAŤ -->
-        <form action="delete_oznam.php" method="post" onsubmit="return confirm('Naozaj chceš zmazať tento oznam?');">
-            <input type="hidden" name="oznam_id" value="<?php echo (int)$row['id']; ?>">
-            <input type="hidden" name="return_url" value="index.php">
-            <button type="submit" class="btn btn-sm btn-outline-danger">
-                Vymazať
-            </button>
-        </form>
-
-    <?php endif; ?>
-</div>
-
-    </div>
-
-    <!-- telo karty -->
-    <div class="announcement-body row g-4">
-        <div class="col-md-4">
-            <?php
-                $imgPath = (!empty($row['foto_path'])) ? $row['foto_path'] : 'uploads/oznamy/default.png';
-            ?>
-            <img src="<?php echo htmlspecialchars($imgPath, ENT_QUOTES); ?>"
-                alt="<?php echo htmlspecialchars($row['nadpis']); ?>"
-                class="announcement-image img-fluid">
-        </div>
-
-        <div class="col-md-8 d-flex flex-column">
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="announcement-meta">
-                        <div><span class="meta-label">Čas:</span> <?php echo $row["cas"] ?: "-"; ?></div>
-                        <div><span class="meta-label">Kde:</span> <?php echo $row["kde"] ?: "-"; ?></div>
-                        <div><span class="meta-label">Koľko:</span> <?php echo $row["kolko"] ?: "-"; ?></div>
+                <div class="section-header section-header-flex mb-4">
+                    <div>
+                        <h2 class="section-title"><?= htmlspecialchars($pageTitle) ?></h2>
+                        <div class="section-title-underline"></div>
                     </div>
+
+                    <?php if ($canManage): ?>
+                        <button type="button" class="btn-add-oznam" id="openAddParPopup">
+                            ➕ Pridať pár
+                        </button>
+                    <?php endif; ?>
                 </div>
+
+                <?php if (empty($pary)): ?>
+                    <p>Zatiaľ nie sú vytvorené žiadne tanečné páry.</p>
+                <?php endif; ?>
+
+                <?php foreach ($pary as $par): ?>
+                    <article class="announcement-card mt-1rem mb-3rem">
+
+                        <div class="announcement-card-header d-flex justify-content-between align-items-start mb-3">
+                            <h3 class="announcement-title mb-0">
+                                <?= htmlspecialchars($par['tanecnik1']) ?>
+                                &nbsp;–&nbsp;
+                                <?= htmlspecialchars($par['tanecnik2']) ?>
+                            </h3>
+
+                            <?php if ($canManage): ?>
+                                <form action="delete_par.php" method="post"
+                                    onsubmit="return confirm('Naozaj chceš zmazať tento pár?');">
+
+                                    <input type="hidden" name="par_id" value="<?= (int)$par['id'] ?>">
+                                    <input type="hidden" name="return_url"
+                                        value="<?= htmlspecialchars($returnUrl ?? 'pary.php', ENT_QUOTES) ?>">
+
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        Vymazať
+                                    </button>
+                                </form>
+                            <?php endif; ?>
+                        </div>
+
+                    </article>
+                <?php endforeach; ?>
+
             </div>
-
-            <p class="announcement-text mt-3">
-                <?php echo nl2br(htmlspecialchars($row["popis"])); ?>
-            </p>
-
-            <div class="text-end mt-auto pt-3">
-                <span class="announcement-author">
-                    <?php echo htmlspecialchars($row["autor_meno"] ?? "-"); ?>
-                </span>
-            </div>
-        </div>
-    </div>
-
-</article>
-<?php endforeach; ?>
-
-
-    </div>
-</main>
-
-    </div>
-
-</div>
-
-<!-- POPUP OVERLAY -->
-<div id="oznam-popup" class="oznam-popup-overlay">
-    <div class="oznam-popup-box">
-
-        <h2>Pridať nový oznam</h2>
-
-        <!-- FORMULAR -->
-        <form action="pridat_oznam.php" method="POST" class="oznam-form" enctype="multipart/form-data">
-            <input type="hidden" name="TypOznamu" value="HO">
-            <input type="hidden" name="return_url" value="index.php">
-
-            <label>Názov oznamu</label>
-            <input type="text" name="nadpis" required>
-
-            <label>Dátum</label>
-            <input type="date" name="datum" required>
-
-            <label>Čas</label>
-            <input type="text" name="cas">
-
-            <label>Kde</label>
-            <input type="text" name="kde">
-
-            <label>Koľko</label>
-            <input type="text" name="kolko">
-
-            <label>Popis</label>
-            <textarea name="popis" rows="4" required></textarea>
-
-            <label for="foto">Fotka oznamu</label>
-            <input type="file" name="foto" id="foto" accept="image/*">
-
-            <div class="popup-buttons">
-                <button type="submit" class="btn-save">Uložiť</button>
-                <button type="button" id="popup-close" class="btn-cancel">Zavrieť</button>
-            </div>
-        </form>
+        </main>
 
     </div>
 </div>
 
-<div id="oznam-edit-popup" class="oznam-popup-overlay">
+<?php if ($canManage): ?>
+<!-- POPUP: pridať pár -->
+<div id="par-popup" class="oznam-popup-overlay">
     <div class="oznam-popup-box">
+        <h2>Pridať pár</h2>
 
-        <h2>Upraviť oznam</h2>
+        <form action="pridat_par.php" method="POST" class="oznam-form" id="par-form">
+            <input type="hidden" name="return_url" value="<?= htmlspecialchars($returnUrl ?? 'pary.php', ENT_QUOTES) ?>">
 
-        <form action="upravit_oznam.php" method="POST" class="oznam-form">
+            <label>Prvý tanečník</label>
+            <select name="user1_id" id="par-user1" class="form-select" required>
+                <option value="">-- vyber --</option>
+                <?php foreach ($users as $u): ?>
+                    <option value="<?= (int)$u['ID'] ?>">
+                        <?= htmlspecialchars(($u['PRIEZVISKO'] ?? '') . ' ' . ($u['MENO'] ?? '') . ' (' . ($u['MAIL'] ?? '') . ')') ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
 
-            <input type="hidden" name="return_url" value="index.php">
+            <label class="mt-2">Druhý tanečník</label>
+            <select name="user2_id" id="par-user2" class="form-select" required>
+                <option value="">-- vyber --</option>
+                <?php foreach ($users as $u): ?>
+                    <option value="<?= (int)$u['ID'] ?>">
+                        <?= htmlspecialchars(($u['PRIEZVISKO'] ?? '') . ' ' . ($u['MENO'] ?? '') . ' (' . ($u['MAIL'] ?? '') . ')') ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
 
-            <input type="hidden" name="id" id="edit-id">
-
-            <label>Názov oznamu</label>
-            <input type="text" name="nadpis" id="edit-nadpis" required>
-
-            <label>Dátum</label>
-            <input type="date" name="datum" id="edit-datum" required>
-
-            <label>Čas</label>
-            <input type="text" name="cas" id="edit-cas">
-
-            <label>Kde</label>
-            <input type="text" name="kde" id="edit-kde">
-
-            <label>Koľko</label>
-            <input type="text" name="kolko" id="edit-kolko">
-
-            <label>Popis</label>
-            <textarea name="popis" id="edit-popis" rows="4" required></textarea>
+            <div id="par-error" class="text-danger mt-2" style="display:none;"></div>
 
             <div class="popup-buttons mt-3">
-                <button type="submit" class="btn-save">Uložiť zmeny</button>
-                <button type="button" id="popup-edit-close" class="btn-cancel">Zavrieť</button>
+                <button type="submit" class="btn-save">Uložiť</button>
+                <button type="button" id="par-popup-close" class="btn-cancel">Zavrieť</button>
             </div>
         </form>
-
     </div>
 </div>
+<?php endif; ?>
 
 
-<script src="menuNavigationPopUp.js?=v3"></script>
 <script src="menuNavigation.js"></script>
+<script src="menuNavigationPopUp.js"></script>
 <script src="slideAnim.js"></script>
+<script src="paryPopUp.js"></script>
+
+
 </body>
 </html>
