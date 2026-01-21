@@ -1,13 +1,12 @@
 <?php
-session_start();
+
 require 'db.php';
 
 $allowedRoles = ['admin', 'trener'];
-if (!isset($_SESSION['user_role']) || !in_array($_SESSION['user_role'], $allowedRoles, true)) {
-    http_response_code(403);
-    echo "Nemáš oprávnenie mazať oznamy.";
-    exit;
-}
+require_once __DIR__ . '/autentifikacia/auth.php';
+require_login();
+require_roles($allowedRoles);
+
 
 $returnUrl = $_POST['return_url'] ?? 'index.php';
 if (strpos($returnUrl, '://') !== false) $returnUrl = 'index.php';

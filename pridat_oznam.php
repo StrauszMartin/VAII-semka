@@ -1,20 +1,14 @@
 <?php
-session_start();
 require 'db.php';
 
 // Oprávnenie
 $allowedRoles = ['admin', 'trener'];
-if (!isset($_SESSION['user_role']) || !in_array($_SESSION['user_role'], $allowedRoles, true)) {
-    http_response_code(403);
-    die("Nemáš oprávnenie pridávať oznamy.");
-}
 
-// Autor = prihlásený používateľ
-if (!isset($_SESSION['user_id'])) {
-    http_response_code(401);
-    die("Nie si prihlásený.");
-}
-$autorId = (int)$_SESSION['user_id'];
+require_once __DIR__ . '/autentifikacia/auth.php';
+require_login();
+require_roles($allowedRoles);
+
+
 
 // Povolené typy oznamov
 $allowedTypes = ['HO', 'TM1', 'TM2', 'POK', 'ZAC'];
@@ -78,6 +72,13 @@ $stmt = $conn->prepare($sql);
 if (!$stmt) {
     die("Chyba SQL prepare: " . $conn->error);
 }
+
+$autorId = (int)($_SESSION['user_id'] ?? 0);
+if ($autorId <= 0) {
+    header("Location: $returnUrl");
+    exit;
+}
+
 
 $stmt->bind_param(
     'ssssssiss',
