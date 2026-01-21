@@ -149,8 +149,9 @@
             <div class="announcement-card mt-4">
                 <div class="p-4">
                     <h5 class="mb-3">Napíš nám</h5>
+                    <div id="kontakt-ajax-alert" class="mt-3"></div>
 
-                    <form method="post" action="kontakt.php">
+                    <form method="post" action="kontakt.php" id="kontakt-form">
                         <div class="mb-3">
                             <label class="form-label">Meno a priezvisko</label>
                             <input
@@ -193,5 +194,6 @@
 
 <script src="menuNavigation.js"></script>
 <script src="slideAnim.js"></script>
+<script src="kontaktAjax.js"></script>
 </body>
 </html>
