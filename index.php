@@ -8,7 +8,14 @@ if (!isset($_SESSION['user_id'])) {
 
 
 $typ = 'HO';
-$sql = "SELECT * FROM oznamy WHERE TypOznamu = ? ORDER BY datum DESC";
+// Načítaj oznamy + autora z tabuľky users (cez autor_id)
+$sql = "
+    SELECT o.*, CONCAT(u.MENO, ' ', u.PRIEZVISKO) AS autor_meno
+    FROM oznamy o
+    LEFT JOIN users u ON u.ID = o.autor_id
+    WHERE o.TypOznamu = ?
+    ORDER BY o.datum DESC
+";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $typ);
 $stmt->execute();
@@ -81,15 +88,6 @@ $result = $stmt->get_result();
                             <li class="sidebar-subitem sidebar-subitem-add" style="cursor:pointer;">➕ Pridať oznam</li>
                         </ul>
                     <?php endif; ?>
-                </div>
-
-
-                <div class="sidebar-group">
-                    <button class="sidebar-group-toggle" aria-expanded="true">Individuálne lekcie <span class="chev">↓</span></button>
-                    <ul class="sidebar-sublist">
-                        <li class="sidebar-subitem">ŠTT</li>
-                        <li class="sidebar-subitem">LAT</li>
-                    </ul>
                 </div>
 
                 <div class="sidebar-group">
@@ -178,12 +176,15 @@ $result = $stmt->get_result();
     <!-- telo karty -->
     <div class="announcement-body row g-4">
         <div class="col-md-4">
-            <img src="default.jpg" 
-                 alt="<?php echo htmlspecialchars($row["nadpis"]); ?>"
-                 class="announcement-image img-fluid">
+            <?php
+                $imgPath = (!empty($row['foto_path'])) ? $row['foto_path'] : 'uploads/oznamy/default.png';
+            ?>
+            <img src="<?php echo htmlspecialchars($imgPath, ENT_QUOTES); ?>"
+                alt="<?php echo htmlspecialchars($row['nadpis']); ?>"
+                class="announcement-image img-fluid">
         </div>
 
-        <div class="col-md-8">
+        <div class="col-md-8 d-flex flex-column">
             <div class="row">
                 <div class="col-sm-6">
                     <div class="announcement-meta">
@@ -205,7 +206,7 @@ $result = $stmt->get_result();
                 <?php echo nl2br(htmlspecialchars($row["popis"])); ?>
             </p>
 
-            <div class="text-end mt-3">
+            <div class="text-end mt-auto pt-3">
                 <span class="announcement-author">
                     <?php echo htmlspecialchars($row["autor"]); ?>
                 </span>
@@ -230,7 +231,7 @@ $result = $stmt->get_result();
         <h2>Pridať nový oznam</h2>
 
         <!-- FORMULAR -->
-        <form action="pridat_oznam.php" method="POST" class="oznam-form">
+        <form action="pridat_oznam.php" method="POST" class="oznam-form" enctype="multipart/form-data">
             <input type="hidden" name="TypOznamu" value="HO">
             <input type="hidden" name="return_url" value="index.php">
 
@@ -252,8 +253,8 @@ $result = $stmt->get_result();
             <label>Popis</label>
             <textarea name="popis" rows="4" required></textarea>
 
-            <label>Autor</label>
-            <input type="text" name="autor" required>
+            <label for="foto">Fotka oznamu</label>
+            <input type="file" name="foto" id="foto" accept="image/*">
 
             <div class="popup-buttons">
                 <button type="submit" class="btn-save">Uložiť</button>
@@ -291,9 +292,6 @@ $result = $stmt->get_result();
             <label>Popis</label>
             <textarea name="popis" id="edit-popis" rows="4" required></textarea>
 
-            <label>Autor</label>
-            <input type="text" name="autor" id="edit-autor" required>
-
             <div class="popup-buttons mt-3">
                 <button type="submit" class="btn-save">Uložiť zmeny</button>
                 <button type="button" id="popup-edit-close" class="btn-cancel">Zavrieť</button>
@@ -303,7 +301,7 @@ $result = $stmt->get_result();
     </div>
 </div>
 
-<!-- Custom JS -->
+
 <script src="menuNavigationPopUp.js"></script>
 <script src="menuNavigation.js"></script>
 <script src="slideAnim.js"></script>
