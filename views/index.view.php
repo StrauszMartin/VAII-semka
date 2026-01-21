@@ -69,8 +69,12 @@
                         <li class="sidebar-subitem"><a class="sidebar-link" href="oznamy_skupina.php?typ=POK">TM DETI<small>Pokrčilí</small></a></li>
                         <li class="sidebar-subitem"><a class="sidebar-link" href="oznamy_skupina.php?typ=ZAC">TM DETI<small>Začitočníci</small></a></li>
                     </ul>
-
                 </div>
+
+                <div class="sidebar-group">
+                    <a class="sidebar-group-toggle sidebar-link" href="sutaze.php">Preferované súťaže</a>
+                </div>
+
             </nav>
 
             <?php if (isset($_SESSION['user_role'])): ?>
