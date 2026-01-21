@@ -2,6 +2,12 @@
 session_start();
 require 'db.php';
 
+if (!isset($_SESSION['user_id'])) {
+    header("Location: Prihlasovanie/prihlasovanie.php");
+    exit();
+}
+
+
 $allowed = [
     'TM1' => 'TM1',
     'TM2' => 'TM2',
@@ -82,22 +88,9 @@ $result = $stmt->get_result();
             <nav class="sidebar-nav">
 
                 <div class="sidebar-group">
-                    <button class="sidebar-group-toggle" aria-expanded="true">Hlavné oznamy</button>
-
-                    <?php if (isset($_SESSION["user_role"]) && ($_SESSION["user_role"] === "admin" || $_SESSION["user_role"] === "trener")): ?>
-                        <ul class="sidebar-sublist">
-                            <li class="sidebar-subitem sidebar-subitem-add" style="cursor:pointer;">➕ Pridať oznam</li>
-                        </ul>
-                    <?php endif; ?>
+                    <a class="sidebar-group-toggle sidebar-link" href="index.php">Hlavné oznamy</a>
                 </div>
 
-                <div class="sidebar-group">
-                    <button class="sidebar-group-toggle" aria-expanded="true">Individuálne lekcie <span class="chev">↓</span></button>
-                    <ul class="sidebar-sublist">
-                        <li class="sidebar-subitem"><strong>ŠTT</strong></li>
-                        <li class="sidebar-subitem">LAT</li>
-                    </ul>
-                </div>
 
                 <div class="sidebar-group">
                     <button class="sidebar-group-toggle" aria-expanded="true">Skupiny <span class="chev">↓</span></button>
@@ -123,10 +116,19 @@ $result = $stmt->get_result();
         <main class="main-content py-4">
             <div class="container max-width">
 
-                <div class="section-header mb-4">
-                    <h2 class="section-title"><?php echo htmlspecialchars($pageTitle); ?></h2>
-                    <div class="section-title-underline"></div>
+                <?php $canManageHeader = isset($_SESSION['user_role']) && in_array($_SESSION['user_role'], ['admin','trener'], true); ?>
+
+                <div class="section-header section-header-flex mb-4">
+                    <div>
+                        <h2 class="section-title"><?php echo htmlspecialchars($pageTitle); ?></h2>
+                        <div class="section-title-underline"></div>
+                    </div>
+
+                    <?php if ($canManageHeader): ?>
+                        <button type="button" class="btn-add-oznam" id="add-oznam-btn">➕ Pridať oznam</button>
+                    <?php endif; ?>
                 </div>
+
 
                 <?php while ($row = $result->fetch_assoc()): ?>
                     <article class="announcement-card | mt-1rem mb-3rem">
@@ -143,8 +145,11 @@ $result = $stmt->get_result();
                                     <?php echo date("j. n. Y", strtotime($row["datum"])); ?>
                                 </span>
 
-                                <?php if (isset($_SESSION['user_role']) && ($_SESSION['user_role'] === 'admin' || $_SESSION['user_role'] === 'trener')): ?>
+                                <?php
+	                                $canManage = isset($_SESSION['user_role']) && in_array($_SESSION['user_role'], ['admin', 'trener'], true);
+	                            ?>
 
+                                <?php if ($canManage): ?>
                                     <button
                                         type="button"
                                         class="btn btn-sm btn-outline-primary edit-btn"
@@ -186,13 +191,6 @@ $result = $stmt->get_result();
                                             <div><span class="meta-label">Čas:</span> <?php echo $row["cas"] ?: "-"; ?></div>
                                             <div><span class="meta-label">Kde:</span> <?php echo $row["kde"] ?: "-"; ?></div>
                                             <div><span class="meta-label">Koľko:</span> <?php echo $row["kolko"] ?: "-"; ?></div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-6">
-                                        <div class="announcement-meta">
-                                            <div><span class="meta-label">S kým:</span> -</div>
-                                            <div><span class="meta-label">Ako:</span> -</div>
                                         </div>
                                     </div>
                                 </div>

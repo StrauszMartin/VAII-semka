@@ -81,13 +81,7 @@ $result = $stmt->get_result();
         <aside class="sidebar">
             <nav class="sidebar-nav">
                 <div class="sidebar-group">
-                    <button class="sidebar-group-toggle" aria-expanded="true">Hlavné oznamy</button>
-
-                    <?php if (isset($_SESSION["user_role"]) && ($_SESSION["user_role"] === "admin" || $_SESSION["user_role"] === "trener")): ?>
-                        <ul class="sidebar-sublist">
-                            <li class="sidebar-subitem sidebar-subitem-add" style="cursor:pointer;">➕ Pridať oznam</li>
-                        </ul>
-                    <?php endif; ?>
+                    <a class="sidebar-group-toggle sidebar-link" href="index.php">Hlavné oznamy</a>
                 </div>
 
                 <div class="sidebar-group">
@@ -116,10 +110,19 @@ $result = $stmt->get_result();
     <div class="container max-width">
 
         <!-- Nadpis sekcie -->
-        <div class="section-header mb-4">
-            <h2 class="section-title">Hlavné oznamy</h2>
-            <div class="section-title-underline"></div>
+        <?php $canManageHeader = isset($_SESSION['user_role']) && in_array($_SESSION['user_role'], ['admin','trener'], true); ?>
+
+        <div class="section-header section-header-flex mb-4">
+            <div>
+                <h2 class="section-title">Hlavné oznamy</h2>
+                <div class="section-title-underline"></div>
+            </div>
+
+            <?php if ($canManageHeader): ?>
+                <button type="button" class="btn-add-oznam" id="add-oznam-btn">➕ Pridať oznam</button>
+            <?php endif; ?>
         </div>
+
 
         <!-- KARTA OZNAMU -->
         <?php while ($row = $result->fetch_assoc()): ?>
@@ -143,8 +146,11 @@ $result = $stmt->get_result();
     </span>
 
     <!-- ADMIN tlačidlá -->
-    <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+            <?php
+	            $canManage = isset($_SESSION['user_role']) && in_array($_SESSION['user_role'], ['admin', 'trener'], true);
+	        ?>
 
+    <?php if ($canManage): ?>
         <!-- UPRAVIŤ -->
         <button 
             type="button"
@@ -192,13 +198,6 @@ $result = $stmt->get_result();
                         <div><span class="meta-label">Čas:</span> <?php echo $row["cas"] ?: "-"; ?></div>
                         <div><span class="meta-label">Kde:</span> <?php echo $row["kde"] ?: "-"; ?></div>
                         <div><span class="meta-label">Koľko:</span> <?php echo $row["kolko"] ?: "-"; ?></div>
-                    </div>
-                </div>
-
-                <div class="col-sm-6">
-                    <div class="announcement-meta">
-                        <div><span class="meta-label">S kým:</span> -</div>
-                        <div><span class="meta-label">Ako:</span> -</div>
                     </div>
                 </div>
             </div>
@@ -305,7 +304,7 @@ $result = $stmt->get_result();
 </div>
 
 
-<script src="menuNavigationPopUp.js"></script>
+<script src="menuNavigationPopUp.js?=v3"></script>
 <script src="menuNavigation.js"></script>
 <script src="slideAnim.js"></script>
 </body>

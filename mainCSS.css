@@ -362,6 +362,9 @@ header {
 .announcement-text {
     font-size: 0.9rem;
     line-height: 1.6;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    white-space: normal;
 }
 
 /* Autor vpravo dole */
@@ -511,5 +514,31 @@ header {
     font-size: 1.01rem; 
     margin-bottom: 7px; 
 }
+
+
+/*button pridat oznam*/
+
+.section-header-flex{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-add-oznam{
+    background-color: #1c6b3b;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.btn-add-oznam:hover{
+    background-color: #15562f;
+}
+
 
 

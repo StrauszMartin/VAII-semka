@@ -2,7 +2,8 @@
 session_start();
 require 'db.php';
 
-if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
+$allowedRoles = ['admin', 'trener'];
+if (!isset($_SESSION['user_role']) || !in_array($_SESSION['user_role'], $allowedRoles, true)) {
     http_response_code(403);
     echo "Nemáš oprávnenie mazať oznamy.";
     exit;

@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['user_id'])) {
+    header("Location: Prihlasovanie/prihlasovanie.php");
+    exit();
+}
+
 $formSuccess = "";
 $formError = "";
 
@@ -124,22 +129,7 @@ $trainers = [
         <aside class="sidebar">
             <nav class="sidebar-nav">
                 <div class="sidebar-group">
-                    <button class="sidebar-group-toggle" aria-expanded="true">Hlavné oznamy</button>
-
-                    <?php if (isset($_SESSION["user_role"]) && ($_SESSION["user_role"] === "admin" || $_SESSION["user_role"] === "trener")): ?>
-                        <ul class="sidebar-sublist">
-                            <li class="sidebar-subitem sidebar-subitem-add" style="cursor:pointer;">➕ Pridať oznam</li>
-                        </ul>
-                    <?php endif; ?>
-                </div>
-
-
-                <div class="sidebar-group">
-                    <button class="sidebar-group-toggle" aria-expanded="true">Individuálne lekcie <span class="chev">↓</span></button>
-                    <ul class="sidebar-sublist">
-                        <li class="sidebar-subitem">ŠTT</li>
-                        <li class="sidebar-subitem">LAT</li>
-                    </ul>
+                    <a class="sidebar-group-toggle sidebar-link" href="index.php">Hlavné oznamy</a>
                 </div>
 
                 <div class="sidebar-group">

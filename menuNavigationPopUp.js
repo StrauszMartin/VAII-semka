@@ -1,35 +1,43 @@
 document.addEventListener("DOMContentLoaded", () => {
-
     const popup = document.getElementById("oznam-popup");
     const closeBtn = document.getElementById("popup-close");
 
-    // Kliknutie na "Pridať oznam"
-    const addBtn = document.querySelector(".sidebar-subitem-add");
-    if (addBtn) {
-        addBtn.addEventListener("click", () => {
-            popup.style.display = "flex";
-        });
-    }
+    if (!popup) return;
+
+    document.addEventListener("click", (e) => {
+        const openBtn =
+            e.target.closest?.("#add-oznam-btn") ||
+            e.target.closest?.(".btn-add-oznam") ||
+            e.target.closest?.(".sidebar-subitem-add");
+
+        if (!openBtn) return;
+
+        e.preventDefault();
+        e.stopPropagation();
+        popup.style.display = "flex";
+    });
 
     // Zavrieť popup
     if (closeBtn) {
-        closeBtn.addEventListener("click", () => {
+        closeBtn.addEventListener("click", (e) => {
+            e.preventDefault();
             popup.style.display = "none";
         });
     }
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    
     const editPopup = document.getElementById("oznam-edit-popup");
     const editCloseBtn = document.getElementById("popup-edit-close");
 
     if (!editPopup) return;
 
-    // Delegovaný handler (funguje aj keď sa tlačidlá vyrenderujú neskôr alebo sa menia)
     document.addEventListener("click", (e) => {
         const btn = e.target.closest?.(".edit-btn");
         if (!btn) return;
+
+        e.preventDefault();
+        e.stopPropagation();
 
         const byId = (id) => document.getElementById(id);
 
@@ -44,9 +52,9 @@ document.addEventListener("DOMContentLoaded", () => {
         editPopup.style.display = "flex";
     });
 
-    // Zavrieť popup
     if (editCloseBtn) {
-        editCloseBtn.addEventListener("click", () => {
+        editCloseBtn.addEventListener("click", (e) => {
+            e.preventDefault();
             editPopup.style.display = "none";
         });
     }
