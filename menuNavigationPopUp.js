@@ -4,14 +4,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const closeBtn = document.getElementById("popup-close");
 
     // Kliknutie na "Pridať oznam"
-    document.querySelector(".sidebar-subitem-add").addEventListener("click", () => {
-        popup.style.display = "flex";
-    });
+    const addBtn = document.querySelector(".sidebar-subitem-add");
+    if (addBtn) {
+        addBtn.addEventListener("click", () => {
+            popup.style.display = "flex";
+        });
+    }
 
     // Zavrieť popup
-    closeBtn.addEventListener("click", () => {
-        popup.style.display = "none";
-    });
+    if (closeBtn) {
+        closeBtn.addEventListener("click", () => {
+            popup.style.display = "none";
+        });
+    }
 });
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -23,7 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".edit-btn").forEach(btn => {
         btn.addEventListener("click", () => {
 
-            // naplnenie formulára dátami z tlačidla
             document.getElementById("edit-id").value = btn.dataset.id;
             document.getElementById("edit-nadpis").value = btn.dataset.nadpis;
             document.getElementById("edit-datum").value = btn.dataset.datum;
@@ -31,16 +35,15 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("edit-kde").value = btn.dataset.kde;
             document.getElementById("edit-kolko").value = btn.dataset.kolko;
             document.getElementById("edit-popis").value = btn.dataset.popis;
-            document.getElementById("edit-autor").value = btn.dataset.autor;
 
-            // zobraz popup
             editPopup.style.display = "flex";
         });
     });
 
     // Zavrieť popup
-    editCloseBtn.addEventListener("click", () => {
-        editPopup.style.display = "none";
-    });
-
+    if (editCloseBtn) {
+        editCloseBtn.addEventListener("click", () => {
+            editPopup.style.display = "none";
+        });
+    }
 });
