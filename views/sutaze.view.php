@@ -139,12 +139,39 @@
                                     <div><span class="meta-label">Adresa:</span> <?php echo htmlspecialchars($row['adresa'] ?? '-'); ?></div>
                                     <div><span class="meta-label">Typy súťaží:</span> <?php echo htmlspecialchars($row['typy'] ?? '-'); ?></div>
                                 </div>
+                                
+                                <?php if (($_SESSION['user_role'] ?? '') === 'user'): ?>
+                                    <form action="toggle_ucast.php" method="post" class="mt-3 ucast-toggle-form">
+                                        <input type="hidden" name="sutaz_id" value="<?= (int)$row['id'] ?>">
+                                        <input type="hidden" name="return_url" value="<?= htmlspecialchars($returnUrl, ENT_QUOTES) ?>">
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-sm <?= ((int)$row['je_prihlaseny'] === 1) ? 'btn-danger' : 'btn-success' ?> ucast-toggle-btn"
+                                        >
+                                            <?= ((int)$row['je_prihlaseny'] === 1) ? 'Zrušiť účasť' : 'Zúčastním sa' ?>
+                                        </button>
+                                    </form>
+                                <?php endif; ?>
+
 
                                 <div class="text-end mt-auto pt-3">
                                     <span class="announcement-author">
                                         <?php echo htmlspecialchars($row['autor_meno'] ?? '-'); ?>
                                     </span>
                                 </div>
+
+                                <?php if ($canManage): ?>
+                                    <div class="mt-3">
+                                        <strong>Prihlásení:</strong><br>
+
+                                        <?php if (!empty($row['prihlaseni'])): ?>
+                                            <small><?= htmlspecialchars($row['prihlaseni']) ?></small>
+                                        <?php else: ?>
+                                            <small class="text-muted">Zatiaľ nikto</small>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endif; ?>
 
                             </div>
                         </div>
